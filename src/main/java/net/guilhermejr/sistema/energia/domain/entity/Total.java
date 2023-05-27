@@ -5,9 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.Audited;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "totais")
-@Audited
 public class Total implements Serializable {
 
     private static final long serialVersionUID = 1L;
