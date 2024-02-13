@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -109,11 +110,19 @@ public class AcompanhamentoService {
         total.setEnergiaConsumidaTotal(total.getEnergiaConsumidaTotal().subtract(acompanhamento.getEnergiaConsumidaTotal()));
         total.setSaldoMes(total.getSaldoMes() - acompanhamento.getSaldoMes());
         total.setTusd(total.getTusd().subtract(acompanhamento.getTusd()));
+        total.setTusdReal(total.getTusdReal().subtract(acompanhamento.getTusdReal()));
         total.setTe(total.getTe().subtract(acompanhamento.getTe()));
+        total.setTeReal(total.getTeReal().subtract(acompanhamento.getTeReal()));
         total.setBandeira(total.getBandeira().subtract(acompanhamento.getBandeira()));
         total.setIluminacaoPublica(total.getIluminacaoPublica().subtract(acompanhamento.getIluminacaoPublica()));
+        total.setIluminacaoPublicaReal(total.getIluminacaoPublicaReal().subtract(acompanhamento.getIluminacaoPublicaReal()));
         total.setDesconto(total.getDesconto().subtract(acompanhamento.getDesconto()));
+        total.setMulta(total.getMulta().subtract(acompanhamento.getMulta()));
+        total.setMultaReal(total.getMultaReal().subtract(acompanhamento.getMultaReal()));
+        total.setJuros(total.getJuros().subtract(acompanhamento.getJuros()));
+        total.setJurosReal(total.getJurosReal().subtract(acompanhamento.getJurosReal()));
         total.setValorTotal(total.getValorTotal().subtract(acompanhamento.getValorTotal()));
+        total.setValorTotalReal(total.getValorTotalReal().subtract(acompanhamento.getValorTotalReal()));
 
         // --- Atualiza total ---
         totalRepository.save(total);
@@ -135,8 +144,8 @@ public class AcompanhamentoService {
         Acompanhamento acompanhamento = acompanhamentoMapper.mapObject(acompanhamentoRequest);
 
         // --- Adiciona usuário que está fazendo a operação ---
-        UUID usuairo = authenticationCurrentUserService.getCurrentUser().getId();
-        acompanhamento.setUsuario(usuairo);
+        UUID usuario = authenticationCurrentUserService.getCurrentUser().getId();
+        acompanhamento.setUsuario(usuario);
 
         // --- Verifica se inicio é menor que fim ---
         if (acompanhamento.getInicio().isAfter(acompanhamento.getFim())) {
@@ -162,8 +171,42 @@ public class AcompanhamentoService {
         acompanhamento.setSaldoMes(saldoMes);
 
         // --- Calcula valorTotal ---
-        BigDecimal valorTotal = acompanhamento.getTusd().add(acompanhamento.getTe().add(acompanhamento.getBandeira().add(acompanhamento.getIluminacaoPublica()))).subtract(acompanhamento.getDesconto());
+        BigDecimal valorTotal = acompanhamento.getTusd().add(acompanhamento.getTe().add(acompanhamento.getBandeira().add(acompanhamento.getIluminacaoPublica().add(acompanhamento.getMulta().add(acompanhamento.getJuros()))))).subtract(acompanhamento.getDesconto());
         acompanhamento.setValorTotal(valorTotal);
+
+        // --- Calcula TUDS real ---
+        BigDecimal tudsReal = acompanhamento.getTusd().multiply(consumoTotal).divide(BigDecimal.valueOf(50.0), 2, RoundingMode.CEILING);
+        acompanhamento.setTusdReal(tudsReal);
+
+        // --- Calcula TE real ---
+        BigDecimal teReal = acompanhamento.getTe().multiply(consumoTotal).divide(BigDecimal.valueOf(50.0), 2, RoundingMode.CEILING);
+        acompanhamento.setTeReal(teReal);
+
+        // --- Calcula Iluminação Pública real ---
+        BigDecimal somaDeTudsRealComTeReal = tudsReal.add(teReal);
+        BigDecimal iluminacaoPublicaReal = calculoIluminacaoPublicaReal(consumoTotal).multiply(somaDeTudsRealComTeReal).divide(BigDecimal.valueOf(100.0), 2, RoundingMode.CEILING);
+        acompanhamento.setIluminacaoPublicaReal(iluminacaoPublicaReal);
+
+        // --- Calcula valorTotalReal ---
+        BigDecimal valorTotalReal = somaDeTudsRealComTeReal.add(iluminacaoPublicaReal);
+
+        // --- Calcula Multa real ---
+        BigDecimal totalSemMultaEJuros = acompanhamento.getTusd().add(acompanhamento.getTe().add(acompanhamento.getBandeira().add(acompanhamento.getIluminacaoPublica())));
+        BigDecimal multaReal = BigDecimal.ZERO;
+        if (acompanhamento.getMulta().compareTo(BigDecimal.ZERO) != 0) {
+            multaReal = totalSemMultaEJuros.divide(valorTotalReal.multiply(acompanhamento.getMulta()), 2, RoundingMode.CEILING);
+        }
+        acompanhamento.setMultaReal(multaReal);
+
+        // --- Calcula Juros real ---
+        BigDecimal jurosReal = BigDecimal.ZERO;
+        if (acompanhamento.getJuros().compareTo(BigDecimal.ZERO) != 0) {
+            jurosReal = totalSemMultaEJuros.divide(valorTotalReal.multiply(acompanhamento.getJuros()), 2, RoundingMode.CEILING);
+        }
+        acompanhamento.setJurosReal(jurosReal);
+
+        // --- Calcula valorTotalReal com multa e juros ---
+        acompanhamento.setValorTotalReal(valorTotalReal.add(multaReal.add(jurosReal.add(acompanhamento.getBandeira()))).subtract(acompanhamento.getDesconto()));
 
         // --- Inclui as datas de criação e atualização ---
         if (id == null) {
@@ -189,11 +232,22 @@ public class AcompanhamentoService {
         total.setEnergiaConsumidaTotal(total.getEnergiaConsumidaTotal().add(acompanhamento.getEnergiaConsumidaTotal()));
         total.setSaldoMes(total.getSaldoMes() + acompanhamento.getSaldoMes());
         total.setTusd(total.getTusd().add(acompanhamento.getTusd()));
+        total.setTusdReal(total.getTusdReal().add(acompanhamento.getTusdReal()));
         total.setTe(total.getTe().add(acompanhamento.getTe()));
+        total.setTeReal(total.getTeReal().add(acompanhamento.getTeReal()));
         total.setBandeira(total.getBandeira().add(acompanhamento.getBandeira()));
         total.setIluminacaoPublica(total.getIluminacaoPublica().add(acompanhamento.getIluminacaoPublica()));
+        total.setIluminacaoPublicaReal(total.getIluminacaoPublicaReal().add(acompanhamento.getIluminacaoPublicaReal()));
         total.setDesconto(total.getDesconto().add(acompanhamento.getDesconto()));
+        total.setMulta(total.getMulta().add(acompanhamento.getMulta()));
+        total.setMultaReal(total.getMultaReal().add(acompanhamento.getMultaReal()));
+        total.setJuros(total.getJuros().add(acompanhamento.getJuros()));
+        total.setJurosReal(total.getJurosReal().add(acompanhamento.getJurosReal()));
         total.setValorTotal(total.getValorTotal().add(acompanhamento.getValorTotal()));
+        total.setValorTotalReal(total.getValorTotalReal().add(acompanhamento.getValorTotalReal()));
+
+        // --- Atualiza saldoMesAcumulado ---
+        acompanhamento.setSaldoMesAcumulado(total.getSaldoMes());
 
         // --- Atualiza total ---
         totalRepository.save(total);
@@ -216,6 +270,41 @@ public class AcompanhamentoService {
         }
 
         return totalOptional.get();
+    }
+
+    // --- CalculoIluminacaoPublicaReal ---------------------------------------
+    private BigDecimal calculoIluminacaoPublicaReal(BigDecimal kwReal) {
+
+        if (kwReal.doubleValue() < 30.0) {
+            return BigDecimal.valueOf(0.11);
+        }
+
+        if (kwReal.doubleValue() > 30.1 && kwReal.doubleValue() < 50.0) {
+            return BigDecimal.valueOf(0.43);
+        }
+
+        if (kwReal.doubleValue() > 50.1 && kwReal.doubleValue() < 100.0) {
+            return BigDecimal.valueOf(1.43);
+        }
+
+        if (kwReal.doubleValue() > 100.1 && kwReal.doubleValue() < 200.0) {
+            return BigDecimal.valueOf(4.3);
+        }
+
+        if (kwReal.doubleValue() > 200.1 && kwReal.doubleValue() < 300.0) {
+            return BigDecimal.valueOf(11.6);
+        }
+
+        if (kwReal.doubleValue() > 300.1 && kwReal.doubleValue() < 650.0) {
+            return BigDecimal.valueOf(22.33);
+        }
+
+        if (kwReal.doubleValue() > 650.1 && kwReal.doubleValue() < 2000.0) {
+            return BigDecimal.valueOf(57.97);
+        }
+
+        return BigDecimal.valueOf(60.91);
+
     }
 
 }

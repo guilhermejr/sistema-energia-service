@@ -69,4 +69,14 @@ public class AcompanhamentoRequest {
     @Schema(description = "Desconto, caso haja", example = "0,00")
     private String desconto;
 
+    @NotBlank
+    @ValorMonetario
+    @Schema(description = "Desconto, caso haja", example = "0,00")
+    private String multa;
+
+    @NotBlank
+    @ValorMonetario
+    @Schema(description = "Desconto, caso haja", example = "0,00")
+    private String juros;
+
 }

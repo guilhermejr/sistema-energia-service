@@ -44,7 +44,13 @@ public class Total implements Serializable {
     private BigDecimal tusd;
 
     @Column(nullable = false)
+    private BigDecimal tusdReal;
+
+    @Column(nullable = false)
     private BigDecimal te;
+
+    @Column(nullable = false)
+    private BigDecimal teReal;
 
     @Column(nullable = false)
     private BigDecimal bandeira;
@@ -53,10 +59,28 @@ public class Total implements Serializable {
     private BigDecimal iluminacaoPublica;
 
     @Column(nullable = false)
+    private BigDecimal iluminacaoPublicaReal;
+
+    @Column(nullable = false)
     private BigDecimal desconto;
 
     @Column(nullable = false)
+    private BigDecimal multa;
+
+    @Column(nullable = false)
+    private BigDecimal multaReal;
+
+    @Column(nullable = false)
+    private BigDecimal juros;
+
+    @Column(nullable = false)
+    private BigDecimal jurosReal;
+
+    @Column(nullable = false)
     private BigDecimal valorTotal;
+
+    @Column(nullable = false)
+    private BigDecimal valorTotalReal;
 
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")

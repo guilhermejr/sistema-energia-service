@@ -34,6 +34,8 @@ public class AcompanhamentoMapper extends ModelMapperConfig {
                 .addMappings(mapper -> mapper.using(converterBigDecimal).map(AcompanhamentoRequest::getTe, Acompanhamento::setTe))
                 .addMappings(mapper -> mapper.using(converterBigDecimal).map(AcompanhamentoRequest::getIluminacaoPublica, Acompanhamento::setIluminacaoPublica))
                 .addMappings(mapper -> mapper.using(converterBigDecimal).map(AcompanhamentoRequest::getDesconto, Acompanhamento::setDesconto))
+                .addMappings(mapper -> mapper.using(converterBigDecimal).map(AcompanhamentoRequest::getMulta, Acompanhamento::setMulta))
+                .addMappings(mapper -> mapper.using(converterBigDecimal).map(AcompanhamentoRequest::getJuros, Acompanhamento::setJuros))
                 .addMappings(mapper -> mapper.using(converterBigDecimal).map(AcompanhamentoRequest::getEnergiaGerada, Acompanhamento::setEnergiaGerada));
 
     }

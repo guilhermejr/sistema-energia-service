@@ -53,10 +53,19 @@ public class Acompanhamento implements Serializable {
     private Integer saldoMes;
 
     @Column(nullable = false)
+    private Integer saldoMesAcumulado;
+
+    @Column(nullable = false)
     private BigDecimal tusd;
 
     @Column(nullable = false)
+    private BigDecimal tusdReal;
+
+    @Column(nullable = false)
     private BigDecimal te;
+
+    @Column(nullable = false)
+    private BigDecimal teReal;
 
     @Column(nullable = false)
     private BigDecimal bandeira;
@@ -65,10 +74,28 @@ public class Acompanhamento implements Serializable {
     private BigDecimal iluminacaoPublica;
 
     @Column(nullable = false)
+    private BigDecimal iluminacaoPublicaReal;
+
+    @Column(nullable = false)
     private BigDecimal desconto;
 
     @Column(nullable = false)
+    private BigDecimal multa;
+
+    @Column(nullable = false)
+    private BigDecimal multaReal;
+
+    @Column(nullable = false)
+    private BigDecimal juros;
+
+    @Column(nullable = false)
+    private BigDecimal jurosReal;
+
+    @Column(nullable = false)
     private BigDecimal valorTotal;
+
+    @Column(nullable = false)
+    private BigDecimal valorTotalReal;
 
     @Column(nullable = false)
     private UUID usuario;

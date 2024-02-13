@@ -36,8 +36,14 @@ public class TotalResponse {
     @Schema(description = "Tarifa", example = "29.04")
     private BigDecimal tusd;
 
+    @Schema(description = "Tarifa real", example = "233.23")
+    private BigDecimal tusdReal;
+
     @Schema(description = "Tarifa", example = "16.56")
     private BigDecimal te;
+
+    @Schema(description = "Tarifa real", example = "127.98")
+    private BigDecimal teReal;
 
     @Schema(description = "Bandeira tarifária", example = "10.45")
     private BigDecimal bandeira;
@@ -45,11 +51,29 @@ public class TotalResponse {
     @Schema(description = "Iluminação pública", example = "1.12")
     private BigDecimal iluminacaoPublica;
 
+    @Schema(description = "Iluminação pública real", example = "37.61")
+    private BigDecimal iluminacaoPublicaReal;
+
     @Schema(description = "Desconto, caso haja", example = "0")
     private BigDecimal desconto;
 
+    @Schema(description = "Multa da conta de energia", example = "57.17")
+    private BigDecimal multa;
+
+    @Schema(description = "Multa da conta de energia real", example = "547.18")
+    private BigDecimal multaReal;
+
+    @Schema(description = "Juros da conta de energia", example = "57.17")
+    private BigDecimal juros;
+
+    @Schema(description = "Juros da conta de energia real", example = "547.18")
+    private BigDecimal jurosReal;
+
     @Schema(description = "Valor total da conta de energia", example = "57.17")
     private BigDecimal valorTotal;
+
+    @Schema(description = "Valor total da conta de energia real", example = "547.18")
+    private BigDecimal valorTotalReal;
 
     @Schema(description = "Data da última atualização", example = "2022-06-04T17:13:47.218729")
     private LocalDateTime atualizado;

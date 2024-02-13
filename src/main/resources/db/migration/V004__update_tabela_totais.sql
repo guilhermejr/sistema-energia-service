@@ -1,0 +1,1 @@
+UPDATE public.totais SET tusd_real = 0, te_real = 0, iluminacao_publica_real = 0, valor_total_real = 0;
