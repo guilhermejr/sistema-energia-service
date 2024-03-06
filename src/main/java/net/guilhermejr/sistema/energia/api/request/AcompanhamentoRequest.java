@@ -29,11 +29,6 @@ public class AcompanhamentoRequest {
     @Schema(description = "Data do fim do ciclo de consumo", example = "20/12/2021")
     private String fim;
 
-    @NotBlank
-    @ValorMonetario
-    @Schema(description = "Energia gerada", example = "653,50")
-    private String energiaGerada;
-
     @NotNull
     @PositiveOrZero
     @Schema(description = "Energia injetada", example = "485")

@@ -7,8 +7,10 @@ import net.guilhermejr.sistema.energia.api.request.AcompanhamentoRequest;
 import net.guilhermejr.sistema.energia.api.response.AcompanhamentoResponse;
 import net.guilhermejr.sistema.energia.config.security.AuthenticationCurrentUserService;
 import net.guilhermejr.sistema.energia.domain.entity.Acompanhamento;
+import net.guilhermejr.sistema.energia.domain.entity.Processamento;
 import net.guilhermejr.sistema.energia.domain.entity.Total;
 import net.guilhermejr.sistema.energia.domain.repository.AcompanhamentoRepository;
+import net.guilhermejr.sistema.energia.domain.repository.ProcessamentoRepository;
 import net.guilhermejr.sistema.energia.domain.repository.TotalRepository;
 import net.guilhermejr.sistema.energia.exception.ExceptionDefault;
 import net.guilhermejr.sistema.energia.exception.ExceptionNotFound;
@@ -20,6 +22,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,6 +34,7 @@ public class AcompanhamentoService {
 
     private final AcompanhamentoRepository acompanhamentoRepository;
     private final TotalRepository totalRepository;
+    private final ProcessamentoRepository processamentoRepository;
     private final AcompanhamentoMapper acompanhamentoMapper;
     private final AuthenticationCurrentUserService authenticationCurrentUserService;
 
@@ -149,9 +153,19 @@ public class AcompanhamentoService {
 
         // --- Verifica se inicio é menor que fim ---
         if (acompanhamento.getInicio().isAfter(acompanhamento.getFim())) {
-            log.error("A data início deve ser depois da data fim");
-            throw new ExceptionDefault("A data início deve ser depois da data fim");
+            log.error("A data início deve ser antes da data fim");
+            throw new ExceptionDefault("A data início deve ser antes da data fim");
         }
+
+        // --- Verifica se os dados da geração foram processados até a data fim ---
+        Processamento processamento = recuperarProcessamento();
+        if (acompanhamento.getFim().isAfter(processamento.getData())) {
+            log.error("A data do último processamento da geração de energia solar é menor que a data fim");
+            throw new ExceptionDefault("A data do último processamento da geração de energia solar é menor que a data fim");
+        }
+
+        // --- Calcula energia gerada ---
+        acompanhamento.setEnergiaGerada(acompanhamentoRepository.energiaGerada(acompanhamento.getInicio(), acompanhamento.getFim()));
 
         // --- Insere id se for atualização ---
         if (id != null) {
@@ -260,13 +274,24 @@ public class AcompanhamentoService {
 
     }
 
+    // --- RecuperarProcessamento ---------------------------------------------
+    private Processamento recuperarProcessamento() {
+        Optional<Processamento> processamentoOptional = processamentoRepository.findById(1L);
+        if (processamentoOptional.isEmpty()) {
+            log.error("Não existe registro na tabela PROCESSAMENTOS");
+            throw new ExceptionDefault("Não existe registro na tabela PROCESSAMENTOS");
+        }
+
+        return processamentoOptional.get();
+    }
+
     // --- RecuperarTotal -----------------------------------------------------
     private Total recuperarTotal() {
 
         Optional<Total> totalOptional = totalRepository.findById(1L);
         if (totalOptional.isEmpty()) {
-            log.error("Não existe registro na tabela TOTAL");
-            throw new ExceptionDefault("Não existe registro na tabela TOTAL");
+            log.error("Não existe registro na tabela TOTAIS");
+            throw new ExceptionDefault("Não existe registro na tabela TOTAIS");
         }
 
         return totalOptional.get();
