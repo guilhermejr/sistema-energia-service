@@ -17,4 +17,10 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT SUM(gerado) FROM geracao WHERE data BETWEEN ?1 AND ?2", nativeQuery = true)
     BigDecimal energiaGerada(LocalDate inicio, LocalDate fim);
 
+    @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes,  energia_consumida_total AS consumo FROM acompanhamentos ORDER BY fim DESC LIMIT 12", nativeQuery = true)
+    List<Object[]> consumoUltimos12Meses();
+
+    @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes, saldo_mes AS consumo FROM acompanhamentos ORDER BY fim DESC LIMIT 12", nativeQuery = true)
+    List<Object[]> saldoUltimos12Meses();
+
 }

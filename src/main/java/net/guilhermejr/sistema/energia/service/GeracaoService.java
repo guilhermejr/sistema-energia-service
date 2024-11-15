@@ -2,27 +2,50 @@ package net.guilhermejr.sistema.energia.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import net.guilhermejr.sistema.energia.api.mapper.GeracaoMapper;
-import net.guilhermejr.sistema.energia.api.response.GeracaoResponse;
-import net.guilhermejr.sistema.energia.domain.entity.Geracao;
+import net.guilhermejr.sistema.energia.api.response.RetornoPadraoGraficoResponse;
 import net.guilhermejr.sistema.energia.domain.repository.GeracaoRepository;
+import net.guilhermejr.sistema.energia.util.ProcessaDadosGraficoUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Log4j2
 @AllArgsConstructor
 @Service
 public class GeracaoService {
 
-    private GeracaoRepository geracaoRepository;
-    private GeracaoMapper geracaoMapper;
+    private final GeracaoRepository geracaoRepository;
+    private final ProcessaDadosGraficoUtil processaDadosGraficoUtil;
 
-    // --- Retornar -----------------------------------------------------------
-    public List<GeracaoResponse> retornar() {
+    // --- geracaoUltimos30Dias -----------------------------------------------
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos30Dias() {
 
-        List<Geracao> geracao = geracaoRepository.geracaoUltimos30Dias();
-        return geracaoMapper.mapList(geracao);
+        List<Object[]> dados = geracaoRepository.geracaoUltimos30Dias();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
+    // --- geracaoUltimos30DiasAnoPassado -------------------------------------
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos30DiasAnoPassado() {
+
+        List<Object[]> dados = geracaoRepository.geracaoUltimos30DiasAnoPassado();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
+    // --- geracaoUltimos12meses ----------------------------------------------
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos12Meses()  {
+
+        List<Object[]> dados = geracaoRepository.geracaoUltimos12Meses();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
+    // --- geracaoUltimos13a24Meses -------------------------------------------
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos13a24Meses()  {
+
+        List<Object[]> dados = geracaoRepository.geracaoUltimos13a24Meses();
+        return processaDadosGraficoUtil.processar(dados);
 
     }
 

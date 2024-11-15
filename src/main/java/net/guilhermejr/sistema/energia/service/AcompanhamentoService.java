@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import net.guilhermejr.sistema.energia.api.mapper.AcompanhamentoMapper;
 import net.guilhermejr.sistema.energia.api.request.AcompanhamentoRequest;
 import net.guilhermejr.sistema.energia.api.response.AcompanhamentoResponse;
+import net.guilhermejr.sistema.energia.api.response.RetornoPadraoGraficoResponse;
 import net.guilhermejr.sistema.energia.config.security.AuthenticationCurrentUserService;
 import net.guilhermejr.sistema.energia.domain.entity.Acompanhamento;
 import net.guilhermejr.sistema.energia.domain.entity.Processamento;
@@ -14,6 +15,7 @@ import net.guilhermejr.sistema.energia.domain.repository.ProcessamentoRepository
 import net.guilhermejr.sistema.energia.domain.repository.TotalRepository;
 import net.guilhermejr.sistema.energia.exception.ExceptionDefault;
 import net.guilhermejr.sistema.energia.exception.ExceptionNotFound;
+import net.guilhermejr.sistema.energia.util.ProcessaDadosGraficoUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,7 @@ public class AcompanhamentoService {
     private final ProcessamentoRepository processamentoRepository;
     private final AcompanhamentoMapper acompanhamentoMapper;
     private final AuthenticationCurrentUserService authenticationCurrentUserService;
+    private final ProcessaDadosGraficoUtil processaDadosGraficoUtil;
 
     // --- Retornar -----------------------------------------------------------
     public List<AcompanhamentoResponse> retornar() {
@@ -97,6 +100,22 @@ public class AcompanhamentoService {
             log.error("Acompanhamento não apagado: {}", id);
             throw new ExceptionNotFound("Não pode apagar acompanhamento. Id não encontrado: " + id);
         }
+
+    }
+
+    // --- consumoUltimos12Meses ----------------------------------------------
+    public List<RetornoPadraoGraficoResponse> consumoUltimos12Meses() {
+
+        List<Object[]> dados = acompanhamentoRepository.consumoUltimos12Meses();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
+    // --- saldoUltimos12Meses ------------------------------------------------
+    public List<RetornoPadraoGraficoResponse> saldoUltimos12Meses() {
+
+        List<Object[]> dados = acompanhamentoRepository.saldoUltimos12Meses();
+        return processaDadosGraficoUtil.processar(dados);
 
     }
 
