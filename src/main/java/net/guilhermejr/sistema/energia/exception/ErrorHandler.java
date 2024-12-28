@@ -1,6 +1,5 @@
 package net.guilhermejr.sistema.energia.exception;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.log4j.Log4j2;
 import net.guilhermejr.sistema.energia.exception.dto.ErrorDefaultDTO;
 import net.guilhermejr.sistema.energia.exception.dto.ErrorRequestDTO;
@@ -41,7 +40,6 @@ public class ErrorHandler {
 
     @ExceptionHandler(ExceptionNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @Hidden
     public List<ErrorDefaultDTO> handleErroNotFound(ExceptionNotFound ex, WebRequest request) {
 
         log.error(ex.getMessage(), ex);

@@ -43,7 +43,7 @@ public class GeracaoController {
     }
 
     // --- geracaoUltimos12Meses ----------------------------------------------
-    @GetMapping("/ultimos12Meses")
+    @GetMapping("/ultimos12meses")
     public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracaoUltimos12Meses() {
 
         log.info("Retornando geracaoUltimos12Meses");
