@@ -17,7 +17,6 @@ import java.util.List;
 @Log4j2
 @AllArgsConstructor
 @RestController
-@CrossOrigin(originPatterns = "*", maxAge = 3600)
 @PreAuthorize("hasAnyRole('ENERGIA')")
 @RequestMapping("/acompanhamentos")
 public class AcompanhamentoController {
