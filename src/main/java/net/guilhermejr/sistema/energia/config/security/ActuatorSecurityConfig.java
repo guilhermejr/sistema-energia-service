@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
-public class ActuatorAndSwaggerSecurityConfig {
+public class ActuatorSecurityConfig {
 
     @Value("${spring.boot.admin.client.instance.metadata.user.name}")
     private String actuatorLogin;
@@ -22,15 +24,9 @@ public class ActuatorAndSwaggerSecurityConfig {
     @Value("${spring.boot.admin.client.instance.metadata.user.password}")
     private String actuatorSenha;
 
-    @Value("${sistema.swagger.login}")
-    private String swaggerLogin;
-
-    @Value("${sistema.swagger.senha}")
-    private String swaggerSenha;
-
     private final PasswordEncoder passwordEncoder;
 
-    public ActuatorAndSwaggerSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ActuatorSecurityConfig(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -38,14 +34,13 @@ public class ActuatorAndSwaggerSecurityConfig {
     public SecurityFilterChain filterChainActuatorAndSwagger(HttpSecurity http) throws Exception {
 
         http
-                .httpBasic()
-                .and()
-                .authorizeRequests()
-                .requestMatchers("/actuator/**").hasRole("ACTUATOR")
-                .requestMatchers("/swagger-ui/**", "/v3/**").hasRole("SWAGGER")
-                .and()
-                .csrf().disable()
-                .formLogin();
+                .httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/**").hasRole("ACTUATOR")
+                        .anyRequest().permitAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable)
+                .formLogin(Customizer.withDefaults());
         return http.build();
     }
 
@@ -59,14 +54,7 @@ public class ActuatorAndSwaggerSecurityConfig {
                 .roles("ACTUATOR")
                 .build();
 
-        UserDetails swagger = User
-                .builder()
-                .username(swaggerLogin)
-                .password(passwordEncoder.encode(swaggerSenha))
-                .roles("SWAGGER")
-                .build();
-
-        return new InMemoryUserDetailsManager(actuator, swagger);
+        return new InMemoryUserDetailsManager(actuator);
 
     }
 
