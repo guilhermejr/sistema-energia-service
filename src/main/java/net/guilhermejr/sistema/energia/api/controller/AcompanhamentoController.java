@@ -103,4 +103,14 @@ public class AcompanhamentoController {
 
     }
 
+    // --- geracaoUltimos12meses ----------------------------------------------
+    @GetMapping("/geracaoUltimos12meses")
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracaoUltimos12meses() {
+
+        log.info("Retornando geracaoUltimos12meses");
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.geracaoUltimos12meses();
+        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
 }

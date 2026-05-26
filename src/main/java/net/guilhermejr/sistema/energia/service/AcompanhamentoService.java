@@ -119,9 +119,18 @@ public class AcompanhamentoService {
 
     }
 
+    // --- geracaoUltimos30dias -----------------------------------------------
     public List<RetornoPadraoGraficoResponse> geracaoUltimos30dias() {
 
         List<Object[]> dados = acompanhamentoRepository.geracaoUltimos30dias();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
+    // --- geracaoUltimos12meses ----------------------------------------------
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos12meses() {
+
+        List<Object[]> dados = acompanhamentoRepository.geracaoUltimos12meses();
         return processaDadosGraficoUtil.processar(dados);
 
     }
