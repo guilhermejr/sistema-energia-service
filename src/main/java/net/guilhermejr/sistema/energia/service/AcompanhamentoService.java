@@ -119,6 +119,13 @@ public class AcompanhamentoService {
 
     }
 
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos30dias() {
+
+        List<Object[]> dados = acompanhamentoRepository.geracaoUltimos30dias();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
     // --- SubtrairTotal ------------------------------------------------------
     private void subtrairTotal(Acompanhamento acompanhamento) {
 

@@ -23,4 +23,6 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes, saldo_mes AS consumo FROM acompanhamentos ORDER BY fim DESC LIMIT 12", nativeQuery = true)
     List<Object[]> saldoUltimos12Meses();
 
+    @Query(value = "SELECT TO_CHAR(data, 'DD/MM') AS dias, gerado FROM geracao WHERE data BETWEEN (CURRENT_DATE - INTERVAL '30 days') AND (CURRENT_DATE - INTERVAL '1 day') ORDER BY data DESC", nativeQuery = true)
+    List<Object[]> geracaoUltimos30dias();
 }
