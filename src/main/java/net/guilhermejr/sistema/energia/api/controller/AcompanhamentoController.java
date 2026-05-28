@@ -94,7 +94,7 @@ public class AcompanhamentoController {
     }
 
     // --- geracaoUltimos30dias -----------------------------------------------
-    @GetMapping("/geracaoUltimos30dias")
+    @GetMapping("/geracaoultimos30dias")
     public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracaoUltimos30dias() {
 
         log.info("Retornando geracaoUltimos30dias");
@@ -104,7 +104,7 @@ public class AcompanhamentoController {
     }
 
     // --- geracaoUltimos12meses ----------------------------------------------
-    @GetMapping("/geracaoUltimos12meses")
+    @GetMapping("/geracaoultimos12meses")
     public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracaoUltimos12meses() {
 
         log.info("Retornando geracaoUltimos12meses");
