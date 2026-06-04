@@ -29,4 +29,7 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT TO_CHAR(a.fim, 'MM/YYYY') AS mes, SUM(g.gerado) AS geracao FROM acompanhamentos a JOIN geracao g ON g.data BETWEEN a.inicio AND a.fim GROUP BY a.fim ORDER BY a.fim DESC LIMIT 12", nativeQuery = true)
     List<Object[]> geracaoUltimos12meses();
 
+    @Query(value = "SELECT * FROM acompanhamentos ORDER BY fim DESC LIMIT 1", nativeQuery = true)
+    Acompanhamento contaUltimoMes();
+
 }

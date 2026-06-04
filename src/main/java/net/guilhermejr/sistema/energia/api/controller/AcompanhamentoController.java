@@ -113,4 +113,14 @@ public class AcompanhamentoController {
 
     }
 
+    // --- contaUltimoMes -----------------------------------------------------
+    @GetMapping("/contaultimomes")
+    public ResponseEntity<AcompanhamentoResponse> contaUltimoMes() {
+
+        log.info("Retornando contaUltimoMes");
+        AcompanhamentoResponse resultado = acompanhamentoService.contaUltimoMes();
+        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
 }

@@ -135,6 +135,14 @@ public class AcompanhamentoService {
 
     }
 
+    // --- contaUltimoMes -----------------------------------------------------
+    public AcompanhamentoResponse contaUltimoMes() {
+
+        Acompanhamento acompanhamento = acompanhamentoRepository.contaUltimoMes();
+        return acompanhamentoMapper.mapObject(acompanhamento);
+
+    }
+
     // --- SubtrairTotal ------------------------------------------------------
     private void subtrairTotal(Acompanhamento acompanhamento) {
 
@@ -365,5 +373,4 @@ public class AcompanhamentoService {
         return BigDecimal.valueOf(60.91);
 
     }
-
 }
