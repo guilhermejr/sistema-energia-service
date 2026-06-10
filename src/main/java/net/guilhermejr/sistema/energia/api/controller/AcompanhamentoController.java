@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.guilhermejr.sistema.energia.api.request.AcompanhamentoRequest;
 import net.guilhermejr.sistema.energia.api.response.AcompanhamentoResponse;
+import net.guilhermejr.sistema.energia.api.response.GeradoResponse;
 import net.guilhermejr.sistema.energia.api.response.RetornoPadraoGraficoResponse;
 import net.guilhermejr.sistema.energia.service.AcompanhamentoService;
 import org.springframework.http.HttpStatus;
@@ -119,6 +120,16 @@ public class AcompanhamentoController {
 
         log.info("Retornando contaUltimoMes");
         AcompanhamentoResponse resultado = acompanhamentoService.contaUltimoMes();
+        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
+    // --- contaUltimoMes -----------------------------------------------------
+    @GetMapping("/geradosesdeultimaleitura")
+    public ResponseEntity<GeradoResponse> geradoDesdeUltimaLeitura() {
+
+        log.info("Retornando geradoDesdeUltimaLeitura");
+        GeradoResponse resultado = acompanhamentoService.geradoDesdeUltimaLeitura();
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }

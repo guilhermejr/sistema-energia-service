@@ -32,4 +32,7 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT * FROM acompanhamentos ORDER BY fim DESC LIMIT 1", nativeQuery = true)
     Acompanhamento contaUltimoMes();
 
+    @Query(value = "SELECT SUM(gerado) AS gerado FROM geracao WHERE data BETWEEN (SELECT fim FROM acompanhamentos ORDER BY fim DESC LIMIT 1) + INTERVAL '1 day' AND CURRENT_DATE", nativeQuery = true)
+    BigDecimal geradoDesdeUltimaLeitura();
+
 }

@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import net.guilhermejr.sistema.energia.api.mapper.AcompanhamentoMapper;
 import net.guilhermejr.sistema.energia.api.request.AcompanhamentoRequest;
 import net.guilhermejr.sistema.energia.api.response.AcompanhamentoResponse;
+import net.guilhermejr.sistema.energia.api.response.GeradoResponse;
 import net.guilhermejr.sistema.energia.api.response.RetornoPadraoGraficoResponse;
 import net.guilhermejr.sistema.energia.config.security.AuthenticationCurrentUserService;
 import net.guilhermejr.sistema.energia.domain.entity.Acompanhamento;
@@ -140,6 +141,13 @@ public class AcompanhamentoService {
 
         Acompanhamento acompanhamento = acompanhamentoRepository.contaUltimoMes();
         return acompanhamentoMapper.mapObject(acompanhamento);
+
+    }
+
+    // --- geradoDesdeUltimaLeitura -------------------------------------------
+    public GeradoResponse geradoDesdeUltimaLeitura() {
+
+        return GeradoResponse.builder().gerado(acompanhamentoRepository.geradoDesdeUltimaLeitura()).build();
 
     }
 
