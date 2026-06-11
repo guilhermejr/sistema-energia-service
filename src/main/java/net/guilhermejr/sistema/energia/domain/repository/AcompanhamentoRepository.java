@@ -1,6 +1,7 @@
 package net.guilhermejr.sistema.energia.domain.repository;
 
 import net.guilhermejr.sistema.energia.domain.entity.Acompanhamento;
+import net.guilhermejr.sistema.energia.domain.entity.Geracao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,7 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT * FROM acompanhamentos ORDER BY fim DESC LIMIT 1", nativeQuery = true)
     Acompanhamento contaUltimoMes();
 
-    @Query(value = "SELECT SUM(gerado) AS gerado FROM geracao WHERE data BETWEEN (SELECT fim FROM acompanhamentos ORDER BY fim DESC LIMIT 1) + INTERVAL '1 day' AND CURRENT_DATE", nativeQuery = true)
-    BigDecimal geradoDesdeUltimaLeitura();
+    @Query(value = "SELECT CURRENT_DATE AS data, CURRENT_TIMESTAMP AS criado, (SELECT atualizado FROM geracao ORDER BY atualizado DESC LIMIT 1) AS atualizado, SUM(gerado) AS gerado FROM geracao WHERE data BETWEEN (SELECT fim FROM acompanhamentos ORDER BY fim DESC LIMIT 1) + INTERVAL '1 day' AND CURRENT_DATE", nativeQuery = true)
+    Geracao geradoDesdeUltimaLeitura();
 
 }

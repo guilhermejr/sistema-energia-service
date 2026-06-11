@@ -3,10 +3,9 @@ package net.guilhermejr.sistema.energia.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import net.guilhermejr.sistema.energia.api.mapper.AcompanhamentoMapper;
+import net.guilhermejr.sistema.energia.api.mapper.GeracaoMapper;
 import net.guilhermejr.sistema.energia.api.request.AcompanhamentoRequest;
-import net.guilhermejr.sistema.energia.api.response.AcompanhamentoResponse;
-import net.guilhermejr.sistema.energia.api.response.GeradoResponse;
-import net.guilhermejr.sistema.energia.api.response.RetornoPadraoGraficoResponse;
+import net.guilhermejr.sistema.energia.api.response.*;
 import net.guilhermejr.sistema.energia.config.security.AuthenticationCurrentUserService;
 import net.guilhermejr.sistema.energia.domain.entity.Acompanhamento;
 import net.guilhermejr.sistema.energia.domain.entity.Processamento;
@@ -38,6 +37,7 @@ public class AcompanhamentoService {
     private final TotalRepository totalRepository;
     private final ProcessamentoRepository processamentoRepository;
     private final AcompanhamentoMapper acompanhamentoMapper;
+    private final GeracaoMapper geracaoMapper;
     private final AuthenticationCurrentUserService authenticationCurrentUserService;
     private final ProcessaDadosGraficoUtil processaDadosGraficoUtil;
 
@@ -145,9 +145,9 @@ public class AcompanhamentoService {
     }
 
     // --- geradoDesdeUltimaLeitura -------------------------------------------
-    public GeradoResponse geradoDesdeUltimaLeitura() {
+    public GeracaoResponse geradoDesdeUltimaLeitura() {
 
-        return GeradoResponse.builder().gerado(acompanhamentoRepository.geradoDesdeUltimaLeitura()).build();
+        return geracaoMapper.mapObject(acompanhamentoRepository.geradoDesdeUltimaLeitura());
 
     }
 
