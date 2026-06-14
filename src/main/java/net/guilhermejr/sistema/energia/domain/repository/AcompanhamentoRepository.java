@@ -36,4 +36,8 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT CURRENT_DATE AS data, CURRENT_TIMESTAMP AS criado, (SELECT atualizado FROM geracao ORDER BY atualizado DESC LIMIT 1) AS atualizado, SUM(gerado) AS gerado FROM geracao WHERE data BETWEEN (SELECT fim FROM acompanhamentos ORDER BY fim DESC LIMIT 1) + INTERVAL '1 day' AND CURRENT_DATE", nativeQuery = true)
     Geracao geradoDesdeUltimaLeitura();
 
+    @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes, valor_total AS valor FROM acompanhamentos ORDER BY fim DESC LIMIT 12", nativeQuery = true)
+    List<Object[]>  valorUltimos12Meses();
+
+
 }

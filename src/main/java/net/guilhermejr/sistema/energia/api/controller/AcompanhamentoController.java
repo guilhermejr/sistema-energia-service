@@ -122,12 +122,22 @@ public class AcompanhamentoController {
 
     }
 
-    // --- contaUltimoMes -----------------------------------------------------
-    @GetMapping("/geradosesdeultimaleitura")
+    // --- geradoDesdeUltimaLeitura -------------------------------------------
+    @GetMapping("/geradosdesdeultimaleitura")
     public ResponseEntity<GeracaoResponse> geradoDesdeUltimaLeitura() {
 
         log.info("Retornando geradoDesdeUltimaLeitura");
         GeracaoResponse resultado = acompanhamentoService.geradoDesdeUltimaLeitura();
+        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
+    // --- valorUltimos12Meses ------------------------------------------------
+    @GetMapping("/valorultimos12meses")
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> valorUltimos12Meses() {
+
+        log.info("Retornando valorUltimos12Meses");
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.valorUltimos12Meses();
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }

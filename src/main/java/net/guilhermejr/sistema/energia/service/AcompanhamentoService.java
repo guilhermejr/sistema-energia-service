@@ -151,6 +151,14 @@ public class AcompanhamentoService {
 
     }
 
+    // --- valorUltimos12Meses ------------------------------------------------
+    public List<RetornoPadraoGraficoResponse> valorUltimos12Meses() {
+
+        List<Object[]> dados = acompanhamentoRepository.valorUltimos12Meses();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
     // --- SubtrairTotal ------------------------------------------------------
     private void subtrairTotal(Acompanhamento acompanhamento) {
 
