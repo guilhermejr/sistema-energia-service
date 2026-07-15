@@ -39,5 +39,10 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes, valor_total AS valor FROM acompanhamentos ORDER BY fim DESC LIMIT 12", nativeQuery = true)
     List<Object[]>  valorUltimos12Meses();
 
+    @Query(value = "WITH ultimos_12_meses AS (SELECT date_trunc('month', fim)::date AS mes, energia_gerada FROM acompanhamentos WHERE date_trunc('month', fim) >= date_trunc('month', CURRENT_DATE) - INTERVAL '12 months') SELECT TO_CHAR(u.mes, 'MM/YYYY') AS mes, u.energia_gerada AS energia_gerada_mes, ROUND(AVG(a.energia_gerada)::numeric, 2) AS media_historica_anos_anteriores FROM ultimos_12_meses u JOIN acompanhamentos a ON EXTRACT(MONTH FROM a.fim) = EXTRACT(MONTH FROM u.mes) AND EXTRACT(YEAR FROM a.fim) < EXTRACT(YEAR FROM u.mes) GROUP BY u.mes, u.energia_gerada ORDER BY u.mes;", nativeQuery = true)
+    List<Object[]>  geracao12MesesAnteriores();
+
+    @Query(value = "WITH ultimos_12_meses AS (SELECT date_trunc('month', fim)::date AS mes, energia_consumida_total FROM acompanhamentos WHERE date_trunc('month', fim) >= date_trunc('month', CURRENT_DATE) - INTERVAL '12 months') SELECT TO_CHAR(u.mes, 'MM/YYYY') AS mes, u.energia_consumida_total AS energia_consumida_total_mes, ROUND(AVG(a.energia_consumida_total)::numeric, 2) AS media_historica_anos_anteriores FROM ultimos_12_meses u JOIN acompanhamentos a ON EXTRACT(MONTH FROM a.fim) = EXTRACT(MONTH FROM u.mes) AND EXTRACT(YEAR FROM a.fim) < EXTRACT(YEAR FROM u.mes) GROUP BY u.mes, u.energia_consumida_total ORDER BY u.mes;", nativeQuery = true)
+    List<Object[]>  consumo12MesesAnteriores();
 
 }

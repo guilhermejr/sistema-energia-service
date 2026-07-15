@@ -19,6 +19,11 @@ public class ProcessaDadosGraficoUtil {
             RetornoPadraoGraficoResponse retornoPadraoGraficoResponse = new RetornoPadraoGraficoResponse();
             retornoPadraoGraficoResponse.setPeriodo(res[0].toString());
             retornoPadraoGraficoResponse.setValor(new BigDecimal(String.valueOf(res[1])));
+
+            if (res.length > 2 && res[2] != null) {
+                retornoPadraoGraficoResponse.setValor2(new BigDecimal(String.valueOf(res[2])));
+            }
+
             retorno.add(retornoPadraoGraficoResponse);
         });
         return retorno;

@@ -142,4 +142,24 @@ public class AcompanhamentoController {
 
     }
 
+    // --- geracao12MesesAnteriores -------------------------------------------
+    @GetMapping("/geracao12mesesanteriores")
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracao12MesesAnteriores() {
+
+        log.info("Retornando geracao12MesesAnteriores");
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.geracao12MesesAnteriores();
+        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
+    // --- consumo12MesesAnteriores -------------------------------------------
+    @GetMapping("/consumo12mesesanteriores")
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> consumo12MesesAnteriores() {
+
+        log.info("Retornando consumo12MesesAnteriores");
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.consumo12MesesAnteriores();
+        return ResponseEntity.status(HttpStatus.OK).body(resultado);
+
+    }
+
 }

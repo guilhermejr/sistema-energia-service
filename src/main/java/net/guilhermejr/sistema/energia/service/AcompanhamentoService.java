@@ -159,6 +159,22 @@ public class AcompanhamentoService {
 
     }
 
+    // --- geracao12MesesAnteriores -------------------------------------------
+    public List<RetornoPadraoGraficoResponse> geracao12MesesAnteriores() {
+
+        List<Object[]> dados = acompanhamentoRepository.geracao12MesesAnteriores();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
+    // --- consumo12MesesAnteriores -------------------------------------------
+    public List<RetornoPadraoGraficoResponse> consumo12MesesAnteriores() {
+
+        List<Object[]> dados = acompanhamentoRepository.consumo12MesesAnteriores();
+        return processaDadosGraficoUtil.processar(dados);
+
+    }
+
     // --- SubtrairTotal ------------------------------------------------------
     private void subtrairTotal(Acompanhamento acompanhamento) {
 
