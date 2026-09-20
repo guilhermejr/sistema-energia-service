@@ -6,7 +6,7 @@ import net.guilhermejr.sistema.energia.api.mapper.AcompanhamentoMapper;
 import net.guilhermejr.sistema.energia.api.mapper.GeracaoMapper;
 import net.guilhermejr.sistema.energia.api.request.AcompanhamentoRequest;
 import net.guilhermejr.sistema.energia.api.response.*;
-import net.guilhermejr.sistema.energia.config.security.AuthenticationCurrentUserService;
+import net.guilhermejr.seguranca.jwt.AuthenticationCurrentUserService;
 import net.guilhermejr.sistema.energia.domain.entity.Acompanhamento;
 import net.guilhermejr.sistema.energia.domain.entity.Processamento;
 import net.guilhermejr.sistema.energia.domain.entity.Total;
