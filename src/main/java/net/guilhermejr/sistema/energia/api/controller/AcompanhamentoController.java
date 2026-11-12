@@ -16,7 +16,9 @@ import java.util.List;
 @Log4j2
 @AllArgsConstructor
 @RestController
-@PreAuthorize("hasAnyRole('ENERGIA')")
+// ENERGIA_LEITURA só consulta: os métodos que gravam exigem ENERGIA, e a anotação
+// no método substitui a da classe.
+@PreAuthorize("hasAnyRole('ENERGIA', 'ENERGIA_LEITURA')")
 @RequestMapping("/acompanhamentos")
 public class AcompanhamentoController {
 
@@ -44,6 +46,7 @@ public class AcompanhamentoController {
 
     // --- Inserir ------------------------------------------------------------
     @PostMapping
+    @PreAuthorize("hasRole('ENERGIA')")
     public ResponseEntity<AcompanhamentoResponse> inserir(@Valid @RequestBody AcompanhamentoRequest acompanhamentoRequest) {
 
         log.info("Inserindo acompanhamento");
@@ -54,6 +57,7 @@ public class AcompanhamentoController {
 
     // --- Atualizar ----------------------------------------------------------
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ENERGIA')")
     public ResponseEntity<AcompanhamentoResponse> atualizar(@PathVariable Long id, @Valid @RequestBody AcompanhamentoRequest acompanhamentoRequest) {
 
         log.info("Atualizando acompanhamento: {}", id);
@@ -64,6 +68,7 @@ public class AcompanhamentoController {
 
     // --- Apagar -------------------------------------------------------------
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ENERGIA')")
     public ResponseEntity<Void> apagar(@PathVariable Long id) {
 
         log.info("Apagando acompanhamento: {}", id);
