@@ -3,6 +3,7 @@ services:
     image: guilhermejr/sistema-energia-service
     container_name: energia-service
     restart: always
+    env_file: /home/guilhermejr/secrets/energia-service.env
     ports:
       - "127.0.0.1:9001:9001"
 
