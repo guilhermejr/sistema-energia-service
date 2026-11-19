@@ -105,17 +105,17 @@ public class AcompanhamentoService {
     }
 
     // --- consumoUltimos12Meses ----------------------------------------------
-    public List<RetornoPadraoGraficoResponse> consumoUltimos12Meses() {
+    public List<RetornoPadraoGraficoResponse> consumoUltimos12Meses(Integer ano) {
 
-        List<Object[]> dados = acompanhamentoRepository.consumoUltimos12Meses();
+        List<Object[]> dados = ano == null ? acompanhamentoRepository.consumoUltimos12Meses() : acompanhamentoRepository.consumoAno(ano);
         return processaDadosGraficoUtil.processar(dados);
 
     }
 
     // --- saldoUltimos12Meses ------------------------------------------------
-    public List<RetornoPadraoGraficoResponse> saldoUltimos12Meses() {
+    public List<RetornoPadraoGraficoResponse> saldoUltimos12Meses(Integer ano) {
 
-        List<Object[]> dados = acompanhamentoRepository.saldoUltimos12Meses();
+        List<Object[]> dados = ano == null ? acompanhamentoRepository.saldoUltimos12Meses() : acompanhamentoRepository.saldoAno(ano);
         return processaDadosGraficoUtil.processar(dados);
 
     }
@@ -129,9 +129,9 @@ public class AcompanhamentoService {
     }
 
     // --- geracaoUltimos12meses ----------------------------------------------
-    public List<RetornoPadraoGraficoResponse> geracaoUltimos12meses() {
+    public List<RetornoPadraoGraficoResponse> geracaoUltimos12meses(Integer ano) {
 
-        List<Object[]> dados = acompanhamentoRepository.geracaoUltimos12meses();
+        List<Object[]> dados = ano == null ? acompanhamentoRepository.geracaoUltimos12meses() : acompanhamentoRepository.geracaoAno(ano);
         return processaDadosGraficoUtil.processar(dados);
 
     }
@@ -152,25 +152,25 @@ public class AcompanhamentoService {
     }
 
     // --- valorUltimos12Meses ------------------------------------------------
-    public List<RetornoPadraoGraficoResponse> valorUltimos12Meses() {
+    public List<RetornoPadraoGraficoResponse> valorUltimos12Meses(Integer ano) {
 
-        List<Object[]> dados = acompanhamentoRepository.valorUltimos12Meses();
+        List<Object[]> dados = ano == null ? acompanhamentoRepository.valorUltimos12Meses() : acompanhamentoRepository.valorAno(ano);
         return processaDadosGraficoUtil.processar(dados);
 
     }
 
     // --- geracao12MesesAnteriores -------------------------------------------
-    public List<RetornoPadraoGraficoResponse> geracao12MesesAnteriores() {
+    public List<RetornoPadraoGraficoResponse> geracao12MesesAnteriores(Integer ano) {
 
-        List<Object[]> dados = acompanhamentoRepository.geracao12MesesAnteriores();
+        List<Object[]> dados = ano == null ? acompanhamentoRepository.geracao12MesesAnteriores() : acompanhamentoRepository.geracaoAnteriores(ano);
         return processaDadosGraficoUtil.processar(dados);
 
     }
 
     // --- consumo12MesesAnteriores -------------------------------------------
-    public List<RetornoPadraoGraficoResponse> consumo12MesesAnteriores() {
+    public List<RetornoPadraoGraficoResponse> consumo12MesesAnteriores(Integer ano) {
 
-        List<Object[]> dados = acompanhamentoRepository.consumo12MesesAnteriores();
+        List<Object[]> dados = ano == null ? acompanhamentoRepository.consumo12MesesAnteriores() : acompanhamentoRepository.consumoAnteriores(ano);
         return processaDadosGraficoUtil.processar(dados);
 
     }

@@ -45,4 +45,23 @@ public interface AcompanhamentoRepository extends JpaRepository<Acompanhamento, 
     @Query(value = "WITH ultimos_12_meses AS (SELECT date_trunc('month', fim)::date AS mes, energia_consumida_total FROM acompanhamentos WHERE date_trunc('month', fim) >= date_trunc('month', CURRENT_DATE) - INTERVAL '12 months') SELECT TO_CHAR(u.mes, 'MM/YYYY') AS mes, u.energia_consumida_total AS energia_consumida_total_mes, ROUND(AVG(a.energia_consumida_total)::numeric, 2) AS media_historica_anos_anteriores FROM ultimos_12_meses u JOIN acompanhamentos a ON EXTRACT(MONTH FROM a.fim) = EXTRACT(MONTH FROM u.mes) AND EXTRACT(YEAR FROM a.fim) < EXTRACT(YEAR FROM u.mes) GROUP BY u.mes, u.energia_consumida_total ORDER BY u.mes;", nativeQuery = true)
     List<Object[]>  consumo12MesesAnteriores();
 
+    // --- Mesmas séries, restritas às contas que terminam no ano informado ---
+    @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes,  energia_consumida_total AS consumo FROM acompanhamentos WHERE EXTRACT(YEAR FROM fim) = ?1 ORDER BY fim DESC", nativeQuery = true)
+    List<Object[]> consumoAno(Integer ano);
+
+    @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes, saldo_mes AS consumo FROM acompanhamentos WHERE EXTRACT(YEAR FROM fim) = ?1 ORDER BY fim DESC", nativeQuery = true)
+    List<Object[]> saldoAno(Integer ano);
+
+    @Query(value = "SELECT TO_CHAR(a.fim, 'MM/YYYY') AS mes, SUM(g.gerado) AS geracao FROM acompanhamentos a JOIN geracao g ON g.data BETWEEN a.inicio AND a.fim WHERE EXTRACT(YEAR FROM a.fim) = ?1 GROUP BY a.fim ORDER BY a.fim DESC", nativeQuery = true)
+    List<Object[]> geracaoAno(Integer ano);
+
+    @Query(value = "SELECT TO_CHAR(fim, 'MM/YYYY') AS mes, valor_total AS valor FROM acompanhamentos WHERE EXTRACT(YEAR FROM fim) = ?1 ORDER BY fim DESC", nativeQuery = true)
+    List<Object[]>  valorAno(Integer ano);
+
+    @Query(value = "WITH meses_do_ano AS (SELECT date_trunc('month', fim)::date AS mes, energia_gerada FROM acompanhamentos WHERE EXTRACT(YEAR FROM fim) = ?1) SELECT TO_CHAR(u.mes, 'MM/YYYY') AS mes, u.energia_gerada AS energia_gerada_mes, ROUND(AVG(a.energia_gerada)::numeric, 2) AS media_historica_anos_anteriores FROM meses_do_ano u JOIN acompanhamentos a ON EXTRACT(MONTH FROM a.fim) = EXTRACT(MONTH FROM u.mes) AND EXTRACT(YEAR FROM a.fim) < EXTRACT(YEAR FROM u.mes) GROUP BY u.mes, u.energia_gerada ORDER BY u.mes;", nativeQuery = true)
+    List<Object[]>  geracaoAnteriores(Integer ano);
+
+    @Query(value = "WITH meses_do_ano AS (SELECT date_trunc('month', fim)::date AS mes, energia_consumida_total FROM acompanhamentos WHERE EXTRACT(YEAR FROM fim) = ?1) SELECT TO_CHAR(u.mes, 'MM/YYYY') AS mes, u.energia_consumida_total AS energia_consumida_total_mes, ROUND(AVG(a.energia_consumida_total)::numeric, 2) AS media_historica_anos_anteriores FROM meses_do_ano u JOIN acompanhamentos a ON EXTRACT(MONTH FROM a.fim) = EXTRACT(MONTH FROM u.mes) AND EXTRACT(YEAR FROM a.fim) < EXTRACT(YEAR FROM u.mes) GROUP BY u.mes, u.energia_consumida_total ORDER BY u.mes;", nativeQuery = true)
+    List<Object[]>  consumoAnteriores(Integer ano);
+
 }

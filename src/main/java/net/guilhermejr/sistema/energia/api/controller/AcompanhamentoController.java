@@ -16,6 +16,8 @@ import java.util.List;
 @Log4j2
 @AllArgsConstructor
 @RestController
+// As séries mensais aceitam ?ano=: sem ele são os últimos 12 meses; com ele, as
+// contas que terminam naquele ano.
 // ENERGIA_LEITURA só consulta: os métodos que gravam exigem ENERGIA, e a anotação
 // no método substitui a da classe.
 @PreAuthorize("hasAnyRole('ENERGIA', 'ENERGIA_LEITURA')")
@@ -79,20 +81,20 @@ public class AcompanhamentoController {
 
     // --- consumoUltimos12Meses ----------------------------------------------
     @GetMapping("/consumoultimos12meses")
-    public ResponseEntity<List<RetornoPadraoGraficoResponse>> consumoUltimos12Meses() {
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> consumoUltimos12Meses(@RequestParam(required = false) Integer ano) {
 
-        log.info("Retornando consumoUltimos12Meses");
-        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.consumoUltimos12Meses();
+        log.info("Retornando consumoUltimos12Meses: {}", ano);
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.consumoUltimos12Meses(ano);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }
 
     // --- saldoUltimos12Meses ------------------------------------------------
     @GetMapping("/saldoultimos12meses")
-    public ResponseEntity<List<RetornoPadraoGraficoResponse>> saldoUltimos12Meses() {
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> saldoUltimos12Meses(@RequestParam(required = false) Integer ano) {
 
-        log.info("Retornando saldoUltimos12Meses");
-        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.saldoUltimos12Meses();
+        log.info("Retornando saldoUltimos12Meses: {}", ano);
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.saldoUltimos12Meses(ano);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }
@@ -109,10 +111,10 @@ public class AcompanhamentoController {
 
     // --- geracaoUltimos12meses ----------------------------------------------
     @GetMapping("/geracaoultimos12meses")
-    public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracaoUltimos12meses() {
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracaoUltimos12meses(@RequestParam(required = false) Integer ano) {
 
-        log.info("Retornando geracaoUltimos12meses");
-        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.geracaoUltimos12meses();
+        log.info("Retornando geracaoUltimos12meses: {}", ano);
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.geracaoUltimos12meses(ano);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }
@@ -139,30 +141,30 @@ public class AcompanhamentoController {
 
     // --- valorUltimos12Meses ------------------------------------------------
     @GetMapping("/valorultimos12meses")
-    public ResponseEntity<List<RetornoPadraoGraficoResponse>> valorUltimos12Meses() {
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> valorUltimos12Meses(@RequestParam(required = false) Integer ano) {
 
-        log.info("Retornando valorUltimos12Meses");
-        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.valorUltimos12Meses();
+        log.info("Retornando valorUltimos12Meses: {}", ano);
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.valorUltimos12Meses(ano);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }
 
     // --- geracao12MesesAnteriores -------------------------------------------
     @GetMapping("/geracao12mesesanteriores")
-    public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracao12MesesAnteriores() {
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> geracao12MesesAnteriores(@RequestParam(required = false) Integer ano) {
 
-        log.info("Retornando geracao12MesesAnteriores");
-        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.geracao12MesesAnteriores();
+        log.info("Retornando geracao12MesesAnteriores: {}", ano);
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.geracao12MesesAnteriores(ano);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }
 
     // --- consumo12MesesAnteriores -------------------------------------------
     @GetMapping("/consumo12mesesanteriores")
-    public ResponseEntity<List<RetornoPadraoGraficoResponse>> consumo12MesesAnteriores() {
+    public ResponseEntity<List<RetornoPadraoGraficoResponse>> consumo12MesesAnteriores(@RequestParam(required = false) Integer ano) {
 
-        log.info("Retornando consumo12MesesAnteriores");
-        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.consumo12MesesAnteriores();
+        log.info("Retornando consumo12MesesAnteriores: {}", ano);
+        List<RetornoPadraoGraficoResponse> resultado = acompanhamentoService.consumo12MesesAnteriores(ano);
         return ResponseEntity.status(HttpStatus.OK).body(resultado);
 
     }
